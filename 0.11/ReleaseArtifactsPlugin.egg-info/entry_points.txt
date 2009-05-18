@@ -1,0 +1,5 @@
+[trac.plugins]
+releaseartifacts.web_ui = releaseartifacts.web_ui
+releaseartifacts.model = releaseartifacts.model
+releaseartifacts.initenv = releaseartifacts.initenv
+

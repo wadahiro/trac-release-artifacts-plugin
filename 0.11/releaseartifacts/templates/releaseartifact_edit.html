@@ -1,0 +1,101 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:py="http://genshi.edgewall.org/"
+	xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="layout.html" />
+<xi:include href="macros.html" />
+<head>
+<title>Release Artifact Edit</title>
+<link rel="stylesheet" type="text/css"
+	href="${chrome.htdocs_location}css/roadmap.css" />
+<script type="text/javascript">
+	var arInput = 0;
+	var Default = arInput;
+	function addInput() {
+	    arInput ++
+	    jQuery("#area").before('        <fieldset id=\"group_'+arInput+'\">            <legend>Artifact</legend>            <div align=\"left\" style=\"float:left\">                <label>SCM Path:<input type=\"text\" name=\"scm_path\" size=\"100\" /></label>            </div>            <div align=\"right\">                <input id=\"delete_'+arInput+'\" type=\"button\" value=\"Delete\" />            </div><br />            <label>Download URL:<input type=\"text\" name=\"url\" size=\"100\" /></label>        </fieldset>        ');
+	    jQuery("#delete_" + arInput).click(function() {
+	        if(confirm('Delete?')) {
+	            jQuery(this).parent().parent().remove();
+	        }
+	    });
+	}
+	function addArtifact(scm_path, url, project_name) {
+	    addInput();
+	    jQuery("#group_" + arInput + " input[@name='url']").val(url);
+	    jQuery("#group_" + arInput + " input[@name='scm_path']").val(scm_path);
+	    jQuery("#group_" + arInput + " input[@name='project_name']").val(project_name);
+	}
+	jQuery(document).ready(function($) {
+	    addArtifact('tags/releases/kss-framework/kss-project-2.9', '')
+	});
+</script>
+</head>
+<body>
+<div id="content" class="roadmap">
+
+	<div class="field">
+		<input name="id" value="[R+1.5]製品リリース" type="hidden">
+		<input name="action" value="edit" type="hidden">
+		<label>Name of the milestone:<br>
+			<input id="name" name="name" size="32" value="[R+1.5]製品リリース" type="text">
+		</label>
+        <div id="releaseartifact_filedset">
+		<fieldset>
+			<legend>Release Artifacts</legend>
+			<input onclick="addInput()" value="Add Artifact" type="button">
+			<fieldset id="group_1">
+				<legend>Artifact</legend>
+				<div style="float: left;" align="left">
+					<label>SCM Path:</label>
+					<input name="scm_path" size="100" type="text">
+				</div>
+				<div align="right">
+					<input id="delete_1" value="Delete" type="button">
+				</div>
+				<br>
+				<label>Download URL:</label>
+				<input name="url" size="100" type="text">
+			</fieldset>
+			<div id="area"></div>
+		</fieldset>
+	</div>
+
+	<fieldset>
+		<legend>Release Artifacts Management</legend>
+		<div py:if="'MILESTONE_CREATE' in perm" class="buttons">
+			<form method="get" action="${href.releaseartifacts()}">
+				<div>
+					<input type="hidden" name="action" value="new" />
+					<input type="submit" value="Add new Release Artifact" />
+				</div>
+			</form>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Release Artifacts</legend>
+		<ul class="milestones">
+			<li py:for="idx, milestone in enumerate(milestones)" class="milestone">
+		
+				<h2><a href="${href.milestone(milestone.name)}">${milestone.name}</a></h2>
+				<div py:for="idx, artifact in enumerate([a for a in artifacts if a.milestone == milestone.name])" class="milestone">
+					${wiki_to_html(context, ' * SCM Path: [source:' + artifact.scm_path + ']')}
+					${wiki_to_html(context, ' * Download URL: ' + artifact.url)}
+				</div>
+			</li>
+		</ul>
+	</fieldset>
+
+	<fieldset>
+		<legend>Release Artifacts Graph</legend>
+		<div class="description" xml:space="preserve">
+			${wiki_to_html(context, graph )}
+		</div>
+	</fieldset>
+
+</div>
+</body>
+</html>

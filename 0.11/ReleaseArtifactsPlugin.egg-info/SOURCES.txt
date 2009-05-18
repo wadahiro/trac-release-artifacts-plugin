@@ -1,0 +1,12 @@
+setup.py
+ReleaseArtifactsPlugin.egg-info/PKG-INFO
+ReleaseArtifactsPlugin.egg-info/SOURCES.txt
+ReleaseArtifactsPlugin.egg-info/dependency_links.txt
+ReleaseArtifactsPlugin.egg-info/entry_points.txt
+ReleaseArtifactsPlugin.egg-info/top_level.txt
+releaseartifacts/__init__.py
+releaseartifacts/graph.py
+releaseartifacts/initenv.py
+releaseartifacts/model.py
+releaseartifacts/versioncontrol.py
+releaseartifacts/web_ui.py
