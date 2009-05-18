@@ -33,7 +33,7 @@
 		
 				<h2><a href="${href.milestone(milestone.name)}">${milestone.name}</a></h2>
 				<div py:for="idx, artifact in enumerate([a for a in artifacts if a.milestone == milestone.name])" class="milestone">
-					${wiki_to_html(context, ' * SCM Path: [source:' + artifact.scm_path + ']')}
+					${wiki_to_html(context, ' * SCM Path: [source:' + artifact.tag + ']')}
 					${wiki_to_html(context, ' * Download URL: ' + artifact.url)}
 				</div>
 			</li>

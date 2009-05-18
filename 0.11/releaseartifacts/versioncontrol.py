@@ -108,7 +108,7 @@ class SCMManager:
         nodes = []
         for artifact in artifacts:
             try:
-                self.parse(nodes, artifact.milestone, artifact.scm_path, self.youngest_rev)
+                self.parse(nodes, artifact.milestone, artifact.tag, self.youngest_rev)
             except ResourceNotFound:
                 pass
             

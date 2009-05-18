@@ -134,7 +134,7 @@ class ArtifactUI(Component):
         <fieldset id="group_'+arInput+'">
             <legend>Artifact</legend>
             <div align="left" style="float:left">
-                <label>Tag:<input type="text" name="scm_path" size="100" /></label>
+                <label>Tag:<input type="text" name="tag" size="100" /></label>
             </div>
             <div align="right">
                 <input id="delete_'+arInput+'" type="button" value="Delete" />
@@ -158,10 +158,10 @@ class ArtifactUI(Component):
                 }
             });
         }
-        function addArtifact(scm_path, url) {
+        function addArtifact(tag, url) {
             addInput();
             jQuery("#group_" + arInput + " input[@name='url']").val(url);
-            jQuery("#group_" + arInput + " input[@name='scm_path']").val(scm_path);
+            jQuery("#group_" + arInput + " input[@name='tag']").val(tag);
         }
         """ % (fieldset)
 
@@ -171,26 +171,26 @@ class ArtifactUI(Component):
         for artifact in artifacts:
             js += """
             addArtifact('%s', '%s');
-        """ % (artifact.scm_path, artifact.url)
+        """ % (artifact.tag, artifact.url)
         
         js += """
         });
         </script>"""
         
-        # resolve customer_name
+        # resolve keywords
         if len(artifacts) == 0:
-            customer_name = ''
+            keywords = ''
         else:
-            customer_name = artifacts[0].customer_name
+            keywords = artifacts[0].keywords
         
         area = js + """
         <fieldset>
             <legend>Release Artifacts</legend>
-            <input type="text" name="customer_name" size="100" value="%s"/>
+            <input type="text" name="keywords" size="100" value="%s"/>
             <input type="button" onclick="addInput()" value="Add Artifact"/>
             <div id="area"/>
         </fieldset>
-        """ % (customer_name)
+        """ % (keywords)
 
         # append fieldset
         stream = stream | Transformer('//form[@id="edit"]/div[@class="field"][1]') \
@@ -208,17 +208,17 @@ class ArtifactUI(Component):
         wiki = '||Tag||URL||\n'
         for artifact in artifacts:
             if artifact.url == '':
-                wiki += '||[source:%s]||-||\n' % (artifact.scm_path)
+                wiki += '||[source:%s]||-||\n' % (artifact.tag)
             else:
-                wiki += '||[source:%s]||[%s]||\n' % (artifact.scm_path, artifact.url)
+                wiki += '||[source:%s]||[%s]||\n' % (artifact.tag, artifact.url)
         
         html = """
         <fieldset>
             <legend>Release Artifacts</legend>
-            <label>Customer:%s</label>
             %s
+            <label>Keywords:%s</label>
         </fieldset>
-        """ % (artifacts[0].customer_name, self._to_wiki(wiki, req))
+        """ % ( self._to_wiki(wiki, req), artifacts[0].keywords)
              
         stream = stream | Transformer('//div[@class="info"]') \
             .append(tag.div(Markup(html), id="releaseartifact_filedset"))
@@ -256,17 +256,17 @@ class ArtifactUI(Component):
         # new milestone name
         milestone_name = req.args.get('name')
         
-        customer_name = req.args.get('customer_name')
-        scm_paths = self._to_list(req.args.get('scm_path'))
+        keywords = req.args.get('keywords')
+        tags = self._to_list(req.args.get('tag'))
         urls = self._to_list(req.args.get('url'))
         
         artifacts = []
         
-        count = len(scm_paths)
+        count = len(tags)
         for index in range(count):
-            if scm_paths[index] == '':
+            if tags[index] == '':
                 continue;
-            artifact = Artifact(self.env, milestone_name, scm_paths[index], customer_name, urls[index])
+            artifact = Artifact(self.env, milestone_name, tags[index], urls[index], keywords)
             artifacts.append(artifact)
 
         ArtifactManager.update_all(self.env, artifacts, old_milestone_name)

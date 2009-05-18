@@ -15,18 +15,18 @@
 	var Default = arInput;
 	function addInput() {
 	    arInput ++
-	    jQuery("#area").before('        <fieldset id=\"group_'+arInput+'\">            <legend>Artifact</legend>            <div align=\"left\" style=\"float:left\">                <label>SCM Path:<input type=\"text\" name=\"scm_path\" size=\"100\" /></label>            </div>            <div align=\"right\">                <input id=\"delete_'+arInput+'\" type=\"button\" value=\"Delete\" />            </div><br />            <label>Download URL:<input type=\"text\" name=\"url\" size=\"100\" /></label>        </fieldset>        ');
+	    jQuery("#area").before('        <fieldset id=\"group_'+arInput+'\">            <legend>Artifact</legend>            <div align=\"left\" style=\"float:left\">                <label>SCM Path:<input type=\"text\" name=\"tag\" size=\"100\" /></label>            </div>            <div align=\"right\">                <input id=\"delete_'+arInput+'\" type=\"button\" value=\"Delete\" />            </div><br />            <label>Download URL:<input type=\"text\" name=\"url\" size=\"100\" /></label>        </fieldset>        ');
 	    jQuery("#delete_" + arInput).click(function() {
 	        if(confirm('Delete?')) {
 	            jQuery(this).parent().parent().remove();
 	        }
 	    });
 	}
-	function addArtifact(scm_path, url, project_name) {
+	function addArtifact(tag, url, keywords) {
 	    addInput();
 	    jQuery("#group_" + arInput + " input[@name='url']").val(url);
-	    jQuery("#group_" + arInput + " input[@name='scm_path']").val(scm_path);
-	    jQuery("#group_" + arInput + " input[@name='project_name']").val(project_name);
+	    jQuery("#group_" + arInput + " input[@name='tag']").val(tag);
+	    jQuery("#group_" + arInput + " input[@name='keywords']").val(keywords);
 	}
 	jQuery(document).ready(function($) {
 	    addArtifact('tags/releases/kss-framework/kss-project-2.9', '')
@@ -37,10 +37,10 @@
 <div id="content" class="roadmap">
 
 	<div class="field">
-		<input name="id" value="[R+1.5]»•iƒŠƒŠ[ƒX" type="hidden">
+		<input name="id" value="[R+1.5]é™¬ï½½èœ©âˆšÎœç¹ï½ªç¹ï½¼ç¹§ï½¹" type="hidden">
 		<input name="action" value="edit" type="hidden">
 		<label>Name of the milestone:<br>
-			<input id="name" name="name" size="32" value="[R+1.5]»•iƒŠƒŠ[ƒX" type="text">
+			<input id="name" name="name" size="32" value="[R+1.5]é™¬ï½½èœ©âˆšÎœç¹ï½ªç¹ï½¼ç¹§ï½¹" type="text">
 		</label>
         <div id="releaseartifact_filedset">
 		<fieldset>
@@ -50,7 +50,7 @@
 				<legend>Artifact</legend>
 				<div style="float: left;" align="left">
 					<label>SCM Path:</label>
-					<input name="scm_path" size="100" type="text">
+					<input name="tag" size="100" type="text">
 				</div>
 				<div align="right">
 					<input id="delete_1" value="Delete" type="button">
@@ -82,7 +82,7 @@
 		
 				<h2><a href="${href.milestone(milestone.name)}">${milestone.name}</a></h2>
 				<div py:for="idx, artifact in enumerate([a for a in artifacts if a.milestone == milestone.name])" class="milestone">
-					${wiki_to_html(context, ' * SCM Path: [source:' + artifact.scm_path + ']')}
+					${wiki_to_html(context, ' * SCM Path: [source:' + artifact.tag + ']')}
 					${wiki_to_html(context, ' * Download URL: ' + artifact.url)}
 				</div>
 			</li>

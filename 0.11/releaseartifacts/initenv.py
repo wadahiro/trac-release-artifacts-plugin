@@ -31,10 +31,10 @@ class EnvSetup(Component):
         sql = [
  """CREATE TABLE release_artifact (
          milestone text,
-         scm_path text,
-         customer_name text,
+         tag text,
          url text,
-         UNIQUE (milestone, scm_path)
+         keywords text,
+         UNIQUE (milestone, tag)
      )"""
 ]
         cursor = db.cursor()

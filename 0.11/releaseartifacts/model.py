@@ -19,11 +19,12 @@ class ArtifactManager:
                         [milestone_old_name])
         
         for artifact in artifacts:
-            cursor.execute("insert into release_artifact (milestone, scm_path, customer_name, url) values (%s, %s, %s, %s)",
+            cursor.execute("insert into release_artifact (milestone, tag, url, keywords) values (%s, %s, %s, %s)",
                            (artifact.milestone,
-                            artifact.scm_path,
-                            artifact.customer_name,
-                            artifact.url))
+                            artifact.tag,
+                            artifact.url,
+                            artifact.keywords
+                           ))
         db.commit()
     
     @classmethod
@@ -31,27 +32,12 @@ class ArtifactManager:
         db = env.get_db_cnx()
         cursor = db.cursor()
         
-        cursor.execute("select milestone, scm_path, customer_name, url from release_artifact where milestone = %s",
+        cursor.execute("select milestone, tag, url, keywords from release_artifact where milestone = %s",
                         [milestone_name])
         artifacts = []
         
-        for milestone, scm_path, customer_name, url in cursor:
-            artifact = Artifact(env, milestone, scm_path, customer_name, url)
-            artifacts.append(artifact)
-            
-        return artifacts
-    
-    @classmethod
-    def find_by_group(cls, env, search_customer_name):
-        db = env.get_db_cnx()
-        cursor = db.cursor()
-        
-        cursor.execute("select milestone, scm_path, customer_name, url from release_artifact where group = %s",
-                        [search_customer_name])
-        artifacts = []
-        
-        for milestone, scm_path, customer_name, url in cursor:
-            artifact = Artifact(env, milestone, scm_path, customer_name, url)
+        for milestone, tag, url, keywords in cursor:
+            artifact = Artifact(env, milestone, tag, url, keywords)
             artifacts.append(artifact)
             
         return artifacts
@@ -61,12 +47,12 @@ class ArtifactManager:
         db = env.get_db_cnx()
         cursor = db.cursor()
         
-        cursor.execute("select milestone, scm_path, customer_name, url from release_artifact",
+        cursor.execute("select milestone, tag, url, keywords from release_artifact",
                         [])
         artifacts = []
         
-        for milestone, scm_path, customer_name, url in cursor:
-            artifact = Artifact(env, milestone, scm_path, customer_name, url)
+        for milestone, tag, url, keywords in cursor:
+            artifact = Artifact(env, milestone, tag, url, keywords)
             artifacts.append(artifact)
             
         return artifacts
@@ -81,15 +67,15 @@ class ArtifactManager:
         
 class Artifact:
     
-    def __init__(self, env, milestone, scm_path, customer_name, url):
+    def __init__(self, env, milestone, tag, url, keywords):
         self.env = env
         self.milestone = milestone
-        self.scm_path = scm_path
-        self.customer_name = customer_name
+        self.tag = tag
         self.url = url
-        print customer_name
-        if self.customer_name == None:
-            self.customer_name == ''
+        self.keywords = keywords
+        print keywords
+        if self.keywords == None:
+            self.keywords == ''
         
     def get_url(self):
         return self.url

@@ -31,7 +31,7 @@ class GraphManager(object):
             
             for a in milestone.artifacts:
                 for n in flat_nodes:
-                    if a.scm_path == n.path:
+                    if a.tag == n.path:
                         sg.add_node(n)
                         
             g.add_subgraph(sg)

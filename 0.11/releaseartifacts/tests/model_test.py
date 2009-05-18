@@ -56,7 +56,7 @@ class ArtifactTest(unittest.TestCase):
         self.req.base_url = '/milestone'
         self.env = ComponentManagerStub()
         self.env.config = ConfigStub()
-        self.artifact = Artifact(self.env, "milestone", "tag/core-1.0", "ProjectA", "http://example.org/releases/org/example/core/1.0/core-1.0.jar")
+        self.artifact = Artifact(self.env, "milestone", "tag/core-1.0", "http://example.org/releases/org/example/core/1.0/core-1.0.jar", "ProjectA")
 
     def test_get_url(self):
         self.assertEquals('http://example.org/releases/org/example/core/1.0/core-1.0.jar',
